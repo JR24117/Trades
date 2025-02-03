@@ -1,17 +1,16 @@
-def moving_average_strategy(data, short_window=5, long_window=20):
-    """
-    A simple moving average crossover strategy.
-    :param data: DataFrame with 'close' prices.
-    :param short_window: Short moving average window.
-    :param long_window: Long moving average window.
-    :return: Buy/Sell signals.
-    """
-    data['short_ma'] = data['close'].rolling(window=short_window).mean()
-    data['long_ma'] = data['close'].rolling(window=long_window).mean()
+import pandas as pd
+
+def rsi_strategy(data, window=14, overbought=70, oversold=30):
+    delta = data['close'].diff()
+    gain = (delta.where(delta > 0, 0)).rolling(window).mean()
+    loss = (-delta.where(delta < 0, 0)).rolling(window).mean()
+
+    rs = gain / loss
+    data['rsi'] = 100 - (100 / (1 + rs))
 
     data['signal'] = 0
-    data.loc[data['short_ma'] > data['long_ma'], 'signal'] = 1  # Buy
-    data.loc[data['short_ma'] <= data['long_ma'], 'signal'] = -1  # Sell
+    data.loc[data['rsi'] < oversold, 'signal'] = 1  # Buy
+    data.loc[data['rsi'] > overbought, 'signal'] = -1  # Sell
 
     return data['signal']
 
