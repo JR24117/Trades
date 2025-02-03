@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 # Import the strategy function
-from strategies.simple_strategy import moving_average_strategy
+from simple_strategy import moving_average_strategy
 
 # Dynamically locate sample_data.csv
 base_dir = os.path.dirname(os.path.abspath(__file__))
