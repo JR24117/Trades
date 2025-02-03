@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
-from simple_strategy import moving_average_strategy
+from strategies.simple_strategy import moving_average_strategy
 
 # Dynamically construct the correct file path
 base_dir = os.path.dirname(os.path.abspath(__file__))  # Get current script directory
