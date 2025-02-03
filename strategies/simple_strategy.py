@@ -1,4 +1,4 @@
-def moving_average_strategy(data, short_window=10, long_window=50):
+def moving_average_strategy(data, short_window=5, long_window=20):
     """
     A simple moving average crossover strategy.
     :param data: DataFrame with 'close' prices.
