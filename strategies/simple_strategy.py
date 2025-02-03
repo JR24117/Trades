@@ -1,16 +1,20 @@
-def moving_average_strategy(data, short_window=5, long_window=20):
+import pandas as pd
+
+def rsi_strategy(data, window=14, overbought=70, oversold=30):
     """
-    A moving average crossover strategy with optimized parameters.
-    :param data: DataFrame containing 'close' prices.
-    :param short_window: Short moving average window (default: 5).
-    :param long_window: Long moving average window (default: 20).
-    :return: Buy/Sell signals.
+    RSI-based trading strategy.
+    Buy when RSI < oversold (30), Sell when RSI > overbought (70).
     """
+    delta = data['close'].diff()
+    gain = (delta.where(delta > 0, 0)).rolling(window).mean()
+    loss = (-delta.where(delta < 0, 0)).rolling(window).mean()
+    
+    rs = gain / loss
+    data['rsi'] = 100 - (100 / (1 + rs))
 
-    data['confirmed_signal'] = data['signal'].rolling(2).sum()  # Sum last 2 days
-
-data.loc[data['confirmed_signal'] == 2, 'signal'] = 1  # Only buy if two buy signals in a row
-data.loc[data['confirmed_signal'] == -2, 'signal'] = -1  # Only sell if two sell signals in a row
-
+    data['signal'] = 0
+    data.loc[data['rsi'] < oversold, 'signal'] = 1  # Buy
+    data.loc[data['rsi'] > overbought, 'signal'] = -1  # Sell
 
     return data['signal']
+
