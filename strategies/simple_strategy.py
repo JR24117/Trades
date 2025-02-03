@@ -6,11 +6,11 @@ def moving_average_strategy(data, short_window=5, long_window=20):
     :param long_window: Long moving average window (default: 20).
     :return: Buy/Sell signals.
     """
-    data['short_ma'] = data['close'].rolling(window=short_window).mean()
-    data['long_ma'] = data['close'].rolling(window=long_window).mean()
 
-    data['signal'] = 0
-    data.loc[data['short_ma'] > data['long_ma'], 'signal'] = 1  # Buy
-    data.loc[data['short_ma'] <= data['long_ma'], 'signal'] = -1  # Sell
+    data['confirmed_signal'] = data['signal'].rolling(2).sum()  # Sum last 2 days
+
+data.loc[data['confirmed_signal'] == 2, 'signal'] = 1  # Only buy if two buy signals in a row
+data.loc[data['confirmed_signal'] == -2, 'signal'] = -1  # Only sell if two sell signals in a row
+
 
     return data['signal']
