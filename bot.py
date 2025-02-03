@@ -1,6 +1,7 @@
 import json
 import pandas as pd
-from strategies.simple_strategy import moving_average_strategy
+from strategies.simple_strategy import rsi_strategy
+data['signal'] = rsi_strategy(data)
 
 # Load configuration
 with open('data/config.json', 'r') as file:
